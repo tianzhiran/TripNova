@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="TripNova.Views.BudgetPage"
+    Title="Budget">
+
+    <ScrollView>
+
+        <VerticalStackLayout Spacing="20">
+
+            <!-- HEADER -->
+            <Grid HeightRequest="170"
+                  BackgroundColor="#16A34A"
+                  Padding="20">
+
+                <VerticalStackLayout>
+
+                    <Label Text="Budget Planner"
+                           FontSize="28"
+                           TextColor="White"
+                           FontAttributes="Bold"/>
+
+                    <Label Text="Track your trip expenses"
+                           FontSize="14"
+                           TextColor="White"/>
+
+                </VerticalStackLayout>
+
+            </Grid>
+
+            <!-- TOTAL BUDGET CARD -->
+
+            <Border Margin="20,-60,20,0"
+                    BackgroundColor="#F1F5F9"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 20"
+                    Padding="20">
+
+                <VerticalStackLayout>
+
+                    <Label Text="Total Budget"
+                           FontSize="14"
+                           TextColor="Gray"/>
+
+                    <Label Text="{Binding TotalBudget, StringFormat='${0:F2}'}"
+                           FontSize="32"
+                           FontAttributes="Bold"/>
+
+                    <Label Text="{Binding Items.Count, StringFormat='{}{0} items'}"
+                           FontSize="12"
+                           TextColor="Gray"/>
+
+                </VerticalStackLayout>
+
+            </Border>
+
+            <!-- CATEGORY BREAKDOWN -->
+
+            <Border Margin="20,0"
+                    Padding="20"
+                    StrokeShape="RoundRectangle 20"
+                    BackgroundColor="White">
+
+                <VerticalStackLayout Spacing="12">
+
+                    <Label Text="Category Breakdown"
+                           FontAttributes="Bold"
+                           FontSize="16"/>
+
+                    <!-- Transportation -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="✈ Transportation"/>
+                        <Label Grid.Column="1"
+                               Text="{Binding TransportationTotal, StringFormat='${0:F2}'}"/>
+                    </Grid>
+
+                    <!-- Accommodation -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="🏨 Accommodation"/>
+                        <Label Grid.Column="1"
+                               Text="{Binding AccommodationTotal, StringFormat='${0:F2}'}"/>
+                    </Grid>
+
+                    <!-- Food -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="🍽 Food &amp; Dining"/>
+                        <Label Grid.Column="1"
+                               Text="{Binding FoodTotal, StringFormat='${0:F2}'}"/>
+                    </Grid>
+
+                    <!-- Activities -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="🎭 Activities"/>
+                        <Label Grid.Column="1"
+                               Text="{Binding ActivitiesTotal, StringFormat='${0:F2}'}"/>
+                    </Grid>
+
+                    <!-- Shopping -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="🛍 Shopping"/>
+                        <Label Grid.Column="1"
+                               Text="{Binding ShoppingTotal, StringFormat='${0:F2}'}"/>
+                    </Grid>
+
+                    <!-- Other -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="📦 Other"/>
+                        <Label Grid.Column="1"
+                               Text="{Binding OtherTotal, StringFormat='${0:F2}'}"/>
+                    </Grid>
+
+                </VerticalStackLayout>
+
+            </Border>
+
+            <!-- BUDGET ITEMS HEADER -->
+
+            <Grid Margin="20,0"
+                  ColumnDefinitions="*,Auto">
+
+                <Label Text="Budget Items"
+                       FontSize="18"
+                       FontAttributes="Bold"/>
+
+                <Button Text="+ Add Item"
+                        Grid.Column="1"
+                        BackgroundColor="#16A34A"
+                        TextColor="White"
+                        CornerRadius="10"
+                        Command="{Binding ShowAddDialogCommand}"/>
+
+            </Grid>
+
+            <!-- ITEM LIST -->
+
+            <CollectionView ItemsSource="{Binding Items}"
+                            Margin="20,0,20,40">
+
+                <CollectionView.ItemTemplate>
+
+                    <DataTemplate>
+
+                        <Border Padding="15"
+                                StrokeShape="RoundRectangle 15"
+                                BackgroundColor="White"
+                                Margin="0,5">
+
+                            <Grid ColumnDefinitions="*,Auto">
+
+                                <VerticalStackLayout>
+
+                                    <Label Text="{Binding Category}"
+                                           FontAttributes="Bold"/>
+
+                                    <Label Text="{Binding Description}"
+                                           FontSize="12"
+                                           TextColor="Gray"/>
+
+                                    <Label Text="{Binding Amount, StringFormat='$ {0:F2}'}"
+                                           TextColor="#16A34A"
+                                           FontAttributes="Bold"/>
+
+                                </VerticalStackLayout>
+
+                                <Button Grid.Column="1"
+                                        Text="🗑"
+                                        BackgroundColor="Transparent"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteItemCommand}"
+                                        CommandParameter="{Binding .}"/>
+
+                            </Grid>
+
+                        </Border>
+
+                    </DataTemplate>
+
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+
+        </VerticalStackLayout>
+
+    </ScrollView>
+
+</ContentPage>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="TripNova.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:TripNova.Views">
+
+    <TabBar>
+
+        <Tab Title="Home">
+            <ShellContent 
+                Route="Home"
+                ContentTemplate="{DataTemplate views:HomePage}" />
+        </Tab>
+
+        <Tab Title="Search">
+            <ShellContent 
+                Route="Search"
+                ContentTemplate="{DataTemplate views:SearchPage}" />
+        </Tab>
+
+        <Tab Title="Budget">
+            <ShellContent 
+                Route="Budget"
+                ContentTemplate="{DataTemplate views:BudgetPage}" />
+        </Tab>
+
+        <Tab Title="AI">
+            <ShellContent 
+                Route="AI"
+                ContentTemplate="{DataTemplate views:AIPage}" />
+        </Tab>
+
+        <Tab Title="Trips">
+            <ShellContent 
+                Route="Trips"
+                ContentTemplate="{DataTemplate views:TripsPage}" />
+        </Tab>
+
+    </TabBar>
+
+</Shell>
