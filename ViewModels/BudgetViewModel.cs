@@ -10,86 +10,93 @@ public class BudgetViewModel : INotifyPropertyChanged
 {
     public ObservableCollection<BudgetItem> Items { get; } = new();
 
-    private string category;
-    public List<string> Categories { get; } = new List<string>
-    {
-        "Transportation",
-        "Accommodation",
-        "Food & Dining",
-        "Activities",
-        "Shopping",
-        "Other"
-    };
-    public string Category
-    {
-        get => category;
-        set { category = value; OnPropertyChanged(); }
-    }
-
-    private string description;
-    public string Description
-    {
-        get => description;
-        set { description = value; OnPropertyChanged(); }
-    }
-
-    private double amount;
-    public double Amount
-    {
-        get => amount;
-        set { amount = value; OnPropertyChanged(); }
-    }
-
-    public ICommand AddItemCommand { get; }
+    public ICommand ShowAddDialogCommand { get; }
     public ICommand DeleteItemCommand { get; }
 
     public BudgetViewModel()
     {
-        AddItemCommand = new Command(AddItem);
+        ShowAddDialogCommand = new Command(ShowAddDialog);
         DeleteItemCommand = new Command<BudgetItem>(DeleteItem);
 
         // sample data
-        Items.Add(new BudgetItem { Category = "Transportation", Description = "Flight ticket", Amount = 850 });
-        Items.Add(new BudgetItem { Category = "Accommodation", Description = "Hotel stay", Amount = 600 });
+        Items.Add(new BudgetItem { Category = "Transportation", Description = "Flight Ticket", Amount = 850 });
+        Items.Add(new BudgetItem { Category = "Accommodation", Description = "Hotel", Amount = 600 });
 
-        Items.CollectionChanged += (s, e) => OnPropertyChanged(nameof(TotalBudget));
+        Items.CollectionChanged += (s, e) =>
+        {
+            OnPropertyChanged(nameof(TotalBudget));
+            OnPropertyChanged(nameof(TransportationTotal));
+            OnPropertyChanged(nameof(AccommodationTotal));
+            OnPropertyChanged(nameof(FoodTotal));
+            OnPropertyChanged(nameof(ActivitiesTotal));
+            OnPropertyChanged(nameof(ShoppingTotal));
+            OnPropertyChanged(nameof(OtherTotal));
+        };
     }
 
-    public double TotalBudget => Items.Sum(i => i.Amount);
-
-    private void AddItem()
+    private async void ShowAddDialog()
     {
-        if (string.IsNullOrWhiteSpace(Category) || Amount <= 0)
+        string category = await Application.Current.MainPage.DisplayActionSheet(
+            "Select Category",
+            "Cancel",
+            null,
+            "Transportation",
+            "Accommodation",
+            "Food & Dining",
+            "Activities",
+            "Shopping",
+            "Other");
+
+        if (category == "Cancel" || category == null)
+            return;
+
+        string description = await Application.Current.MainPage.DisplayPromptAsync(
+            "Description",
+            "Enter expense description");
+
+        string amountText = await Application.Current.MainPage.DisplayPromptAsync(
+            "Amount",
+            "Enter amount",
+            keyboard: Keyboard.Numeric);
+
+        if (!double.TryParse(amountText, out double amount) || amount <= 0)
             return;
 
         Items.Add(new BudgetItem
         {
-            Category = Category,
-            Description = Description,
-            Amount = Amount
+            Category = category,
+            Description = description,
+            Amount = amount
         });
-
-        Category = "";
-        Description = "";
-        Amount = 0;
-
-        OnPropertyChanged(nameof(Category));
-        OnPropertyChanged(nameof(Description));
-        OnPropertyChanged(nameof(Amount));
     }
 
     private void DeleteItem(BudgetItem item)
     {
         if (item != null)
-        {
             Items.Remove(item);
-        }
     }
+
+    public double TotalBudget => Items.Sum(i => i.Amount);
+
+    public double TransportationTotal =>
+        Items.Where(i => i.Category == "Transportation").Sum(i => i.Amount);
+
+    public double AccommodationTotal =>
+        Items.Where(i => i.Category == "Accommodation").Sum(i => i.Amount);
+
+    public double FoodTotal =>
+        Items.Where(i => i.Category == "Food & Dining").Sum(i => i.Amount);
+
+    public double ActivitiesTotal =>
+        Items.Where(i => i.Category == "Activities").Sum(i => i.Amount);
+
+    public double ShoppingTotal =>
+        Items.Where(i => i.Category == "Shopping").Sum(i => i.Amount);
+
+    public double OtherTotal =>
+        Items.Where(i => i.Category == "Other").Sum(i => i.Amount);
 
     public event PropertyChangedEventHandler PropertyChanged;
-
     void OnPropertyChanged([CallerMemberName] string name = "")
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-    }
+        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 }

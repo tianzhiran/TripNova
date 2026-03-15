@@ -29,8 +29,8 @@
 
             </Grid>
 
-            <!-- TOTAL BUDGET CARD -->
 
+            <!-- TOTAL BUDGET CARD -->
             <Border Margin="20,-60,20,0"
                     BackgroundColor="#F1F5F9"
                     StrokeThickness="0"
@@ -55,8 +55,8 @@
 
             </Border>
 
-            <!-- CATEGORY BREAKDOWN -->
 
+            <!-- CATEGORY BREAKDOWN -->
             <Border Margin="20,0"
                     Padding="20"
                     StrokeShape="RoundRectangle 20"
@@ -68,42 +68,36 @@
                            FontAttributes="Bold"
                            FontSize="16"/>
 
-                    <!-- Transportation -->
                     <Grid ColumnDefinitions="*,Auto">
                         <Label Text="✈ Transportation"/>
                         <Label Grid.Column="1"
                                Text="{Binding TransportationTotal, StringFormat='${0:F2}'}"/>
                     </Grid>
 
-                    <!-- Accommodation -->
                     <Grid ColumnDefinitions="*,Auto">
                         <Label Text="🏨 Accommodation"/>
                         <Label Grid.Column="1"
                                Text="{Binding AccommodationTotal, StringFormat='${0:F2}'}"/>
                     </Grid>
 
-                    <!-- Food -->
                     <Grid ColumnDefinitions="*,Auto">
                         <Label Text="🍽 Food &amp; Dining"/>
                         <Label Grid.Column="1"
                                Text="{Binding FoodTotal, StringFormat='${0:F2}'}"/>
                     </Grid>
 
-                    <!-- Activities -->
                     <Grid ColumnDefinitions="*,Auto">
                         <Label Text="🎭 Activities"/>
                         <Label Grid.Column="1"
                                Text="{Binding ActivitiesTotal, StringFormat='${0:F2}'}"/>
                     </Grid>
 
-                    <!-- Shopping -->
                     <Grid ColumnDefinitions="*,Auto">
                         <Label Text="🛍 Shopping"/>
                         <Label Grid.Column="1"
                                Text="{Binding ShoppingTotal, StringFormat='${0:F2}'}"/>
                     </Grid>
 
-                    <!-- Other -->
                     <Grid ColumnDefinitions="*,Auto">
                         <Label Text="📦 Other"/>
                         <Label Grid.Column="1"
@@ -114,8 +108,8 @@
 
             </Border>
 
-            <!-- BUDGET ITEMS HEADER -->
 
+            <!-- BUDGET ITEMS HEADER -->
             <Grid Margin="20,0"
                   ColumnDefinitions="*,Auto">
 
@@ -132,8 +126,8 @@
 
             </Grid>
 
-            <!-- ITEM LIST -->
 
+            <!-- ITEM LIST -->
             <CollectionView ItemsSource="{Binding Items}"
                             Margin="20,0,20,40">
 
