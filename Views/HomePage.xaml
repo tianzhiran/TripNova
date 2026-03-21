@@ -1,171 +1,89 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="TripNova.Views.HomePage"
-    Title="Home">
-
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="TripNova.Views.HomePage" Title="Home">
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="25">
-
             <!-- Hero Section -->
             <VerticalStackLayout Spacing="5">
-                <Label
-                    Text="Plan Your Dream Trip"
-                    FontSize="28"
-                    FontAttributes="Bold" />
-
-                <Label
-                    Text="Everything you need for the perfect journey."
-                    FontSize="14"
-                    TextColor="Gray" />
+                <Label Text="Plan Your Dream Trip" FontSize="28" FontAttributes="Bold" />
+                <Label Text="Everything you need for the perfect journey." FontSize="14" TextColor="Gray" />
             </VerticalStackLayout>
-
             <!-- Quick Buttons -->
             <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
-
-                <Button
-                    Grid.Column="0"
-                    Text="Search"
-                    BackgroundColor="#2563EB"
-                    TextColor="White"
-                    CornerRadius="12"/>
-
-                <Button
-                    Grid.Column="1"
-                    Text="Ask AI"
-                    BackgroundColor="#7C3AED"
-                    TextColor="White"
-                    CornerRadius="12"/>
-
+                <Button Grid.Column="0" Text="Search" BackgroundColor="#2563EB" TextColor="White" CornerRadius="12"/>
+                <Button Grid.Column="1" Text="Ask AI" BackgroundColor="#7C3AED" TextColor="White" CornerRadius="12"/>
             </Grid>
-
-            <Label
-                Text="Trip Planning Tools"
-                FontSize="20"
-                FontAttributes="Bold" />
-
+            <Label Text="Trip Planning Tools" FontSize="20" FontAttributes="Bold" />
             <!-- Cards -->
-            <Grid ColumnDefinitions="*,*"
-                  RowDefinitions="Auto,Auto,Auto,Auto"
-                  ColumnSpacing="15"
-                  RowSpacing="15">
-
+            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="15" RowSpacing="15">
                 <!-- Row 1 -->
-                <Border Grid.Row="0" Grid.Column="0"
-                    StrokeShape="RoundRectangle 15"
-                    Padding="20">
+                <Border Grid.Row="0" Grid.Column="0" StrokeShape="RoundRectangle 15" Padding="20">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnSearchTapped"/>
                     </Border.GestureRecognizers>
-
                     <VerticalStackLayout>
                         <Label Text="Search Destinations" FontAttributes="Bold"/>
                     </VerticalStackLayout>
                 </Border>
-
-                <Border Grid.Row="0" Grid.Column="1"
-                    StrokeShape="RoundRectangle 15"
-                    Padding="20">
-
+                <Border Grid.Row="0" Grid.Column="1" StrokeShape="RoundRectangle 15" Padding="20">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnBudgetTapped"/>
                     </Border.GestureRecognizers>
-
                     <VerticalStackLayout>
                         <Label Text="Budget Planner" FontAttributes="Bold"/>
                     </VerticalStackLayout>
-
                 </Border>
-
                 <!-- Row 2 -->
-                <Border Grid.Row="1" Grid.Column="0"
-                    StrokeShape="RoundRectangle 15"
-                    Padding="20">
-
+                <Border Grid.Row="1" Grid.Column="0" StrokeShape="RoundRectangle 15" Padding="20">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnTransportTapped"/>
                     </Border.GestureRecognizers>
-
                     <VerticalStackLayout>
                         <Label Text="Transportation" FontAttributes="Bold"/>
                     </VerticalStackLayout>
-
                 </Border>
-
-                <Border Grid.Row="1" Grid.Column="1"
-                    StrokeShape="RoundRectangle 15"
-                    Padding="20">
-
+                <Border Grid.Row="1" Grid.Column="1" StrokeShape="RoundRectangle 15" Padding="20">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnAccommodationTapped"/>
                     </Border.GestureRecognizers>
-
                     <VerticalStackLayout>
                         <Label Text="Accommodation" FontAttributes="Bold"/>
                     </VerticalStackLayout>
-
                 </Border>
-
                 <!-- Row 3 -->
-                <Border Grid.Row="2" Grid.Column="0"
-                    StrokeShape="RoundRectangle 15"
-                    Padding="20">
-
+                <Border Grid.Row="2" Grid.Column="0" StrokeShape="RoundRectangle 15" Padding="20">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnFoodTapped"/>
                     </Border.GestureRecognizers>
-
                     <VerticalStackLayout>
                         <Label Text="Food and Dining" FontAttributes="Bold"/>
                     </VerticalStackLayout>
-
                 </Border>
-
-                <Border Grid.Row="2" Grid.Column="1"
-                    StrokeShape="RoundRectangle 15"
-                    Padding="20">
-
+                <Border Grid.Row="2" Grid.Column="1" StrokeShape="RoundRectangle 15" Padding="20">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnItineraryTapped"/>
                     </Border.GestureRecognizers>
-
                     <VerticalStackLayout>
                         <Label Text="Itinerary" FontAttributes="Bold"/>
                     </VerticalStackLayout>
-
                 </Border>
                 <!-- Row 4 -->
-                <Border Grid.Row="3" Grid.Column="0"
-                    StrokeShape="RoundRectangle 15"
-                    Padding="20">
-
+                <Border Grid.Row="3" Grid.Column="0" StrokeShape="RoundRectangle 15" Padding="20">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnAITapped"/>
                     </Border.GestureRecognizers>
-
                     <VerticalStackLayout>
                         <Label Text="AI Assistant" FontAttributes="Bold"/>
                     </VerticalStackLayout>
-
                 </Border>
-
-                <Border Grid.Row="3" Grid.Column="1"
-                    StrokeShape="RoundRectangle 15"
-                    Padding="20">
-
+                <Border Grid.Row="3" Grid.Column="1" StrokeShape="RoundRectangle 15" Padding="20">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnTripsTapped"/>
                     </Border.GestureRecognizers>
-
                     <VerticalStackLayout>
                         <Label Text="My Trips" FontAttributes="Bold"/>
                     </VerticalStackLayout>
-
                 </Border>
             </Grid>
-
         </VerticalStackLayout>
     </ScrollView>
-
-</ContentPage>  
+</ContentPage>
