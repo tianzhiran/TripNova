@@ -1,59 +1,149 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TripNova.Views.TripsPage"
-             Title="TripsPage">
+             BackgroundColor="#F5F5F5">
+
     <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="15">
+        <VerticalStackLayout Spacing="15">
 
-            <Label
-        Text="My Trips"
-        FontSize="26"
-        FontAttributes="Bold"/>
+            <!-- 🔴 HEADER -->
+            <Grid HeightRequest="160" Padding="20" BackgroundColor="#FF2D75">
+                <VerticalStackLayout Spacing="10">
 
-            <!-- Create Trip Section -->
+                    <Label Text="My Trips"
+                           FontSize="26"
+                           FontAttributes="Bold"
+                           TextColor="White"/>
 
-            <Entry Placeholder="Destination"
-           Text="{Binding Destination}" />
+                    <Label Text="Manage all your travel plans"
+                           FontSize="14"
+                           TextColor="White"/>
 
-            <DatePicker Date="{Binding StartDate}" />
+                    <Button Text="+ Plan New Trip"
+                            Command="{Binding GoToCreateTripCommand}"
+                            BackgroundColor="White"
+                            TextColor="#FF2D75"
+                            CornerRadius="10"
+                            HeightRequest="45"/>
+                </VerticalStackLayout>
+            </Grid>
 
-            <DatePicker Date="{Binding EndDate}" />
+            <!-- 🔘 FILTER TABS (FIXED) -->
+            <HorizontalStackLayout Spacing="10" Padding="15,0">
 
-            <Entry Placeholder="Budget"
-           Keyboard="Numeric"
-           Text="{Binding Budget}" />
+                <Button Text="All Trips"
+                        Command="{Binding FilterCommand}"
+                        CommandParameter="All"
+                        BackgroundColor="#FF2D75"
+                        TextColor="White"
+                        CornerRadius="20"/>
 
-            <Entry Placeholder="Travellers"
-           Keyboard="Numeric"
-           Text="{Binding Travellers}" />
+                <Button Text="Upcoming"
+                        Command="{Binding FilterCommand}"
+                        CommandParameter="Upcoming"
+                        BackgroundColor="#E0E0E0"
+                        CornerRadius="20"/>
 
-            <Button
-        Text="Create Trip"
-        Command="{Binding AddTripCommand}" />
+                <Button Text="Planning"
+                        Command="{Binding FilterCommand}"
+                        CommandParameter="Planning"
+                        BackgroundColor="#E0E0E0"
+                        CornerRadius="20"/>
 
-            <!-- Trips List -->
+                <Button Text="Past"
+                        Command="{Binding FilterCommand}"
+                        CommandParameter="Past"
+                        BackgroundColor="#E0E0E0"
+                        CornerRadius="20"/>
+            </HorizontalStackLayout>
 
+            <!-- 📦 TRIPS LIST -->
             <CollectionView ItemsSource="{Binding Trips}">
-
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
 
-                        <Border Padding="15" StrokeShape="RoundRectangle 10">
+                        <Border StrokeShape="RoundRectangle 15"
+                                Margin="15,5"
+                                Padding="0"
+                                BackgroundColor="White">
 
                             <VerticalStackLayout>
 
-                                <Label Text="{Binding Destination}"
-                               FontSize="18"
-                               FontAttributes="Bold"/>
+                                <!-- IMAGE -->
+                                <Grid HeightRequest="150">
+                                    <Image Source="bali.jpg"
+                                           Aspect="AspectFill"/>
 
-                                <Label Text="{Binding StartDate, StringFormat='Start: {0:dd MMM yyyy}'}"/>
+                                    <Label Text="Upcoming"
+                                           BackgroundColor="#DDE7FF"
+                                           TextColor="Blue"
+                                           Padding="6,2"
+                                           HorizontalOptions="End"
+                                           VerticalOptions="Start"
+                                           Margin="10"/>
+                                </Grid>
 
-                                <Label Text="{Binding EndDate, StringFormat='End: {0:dd MMM yyyy}'}"/>
+                                <!-- CONTENT -->
+                                <VerticalStackLayout Padding="12" Spacing="6">
 
-                                <Label Text="{Binding Budget, StringFormat='Budget: ${0}'}"/>
+                                    <Label Text="{Binding Destination}"
+                                           FontSize="18"
+                                           FontAttributes="Bold"/>
 
-                                <Label Text="{Binding Travellers, StringFormat='Travellers: {0}'}"/>
+                                    <Label Text="Indonesia"
+                                           FontSize="12"
+                                           TextColor="Gray"/>
+
+                                    <!-- Date + Budget -->
+                                    <Grid ColumnDefinitions="*,*">
+
+                                        <Label>
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="{Binding StartDate, StringFormat='{0:MMM dd}'}"/>
+                                                    <Span Text=" - "/>
+                                                    <Span Text="{Binding EndDate, StringFormat='{0:MMM dd}'}"/>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+
+                                        <Label Text="{Binding Budget, StringFormat='$ {0}'}"
+                                               Grid.Column="1"
+                                               HorizontalTextAlignment="End"/>
+                                    </Grid>
+
+                                    <Label Text="{Binding Travellers, StringFormat='{0} travelers'}"
+                                           FontSize="12"
+                                           TextColor="Gray"/>
+
+                                    <Border BackgroundColor="#EEF2FF"
+                                            StrokeShape="RoundRectangle 10"
+                                            Padding="8">
+                                        <Label Text="Trip coming soon"
+                                               HorizontalTextAlignment="Center"
+                                               TextColor="#3B82F6"/>
+                                    </Border>
+
+                                    <!-- ACTIONS (FIXED) -->
+                                    <Grid ColumnDefinitions="*,*" Margin="0,10,0,0">
+
+                                        <!-- Edit (optional) -->
+                                        <Button Text="Edit"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditTripCommand}"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="#F5F5F5"
+                                                Grid.Column="0"/>
+
+                                        <!-- DELETE (FIXED 🔥) -->
+                                        <Button Text="Delete"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteTripCommand}"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="#FFE5E5"
+                                                TextColor="Red"
+                                                Grid.Column="1"/>
+                                    </Grid>
+
+                                </VerticalStackLayout>
 
                             </VerticalStackLayout>
 
@@ -61,7 +151,6 @@
 
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
-
             </CollectionView>
 
         </VerticalStackLayout>

@@ -3,81 +3,145 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using TripNova.Models;
+using TripNova.Services;
 
 namespace TripNova.ViewModels;
 
+
 public class TripsViewModel : INotifyPropertyChanged
 {
+    private readonly DatabaseService _db;
+
+    // ---------------- COLLECTION ----------------
+
     public ObservableCollection<Trip> Trips { get; } = new();
 
-    private string destination;
-    public string Destination
+    private List<Trip> allTrips = new();
+
+    // ---------------- FILTER ----------------
+
+    private string selectedFilter = "All";
+    public string SelectedFilter
     {
-        get => destination;
-        set { destination = value; OnPropertyChanged(); }
+        get => selectedFilter;
+        set
+        {
+            selectedFilter = value;
+            OnPropertyChanged();
+            ApplyFilter();
+        }
     }
 
-    private DateTime startDate = DateTime.Today;
-    public DateTime StartDate
-    {
-        get => startDate;
-        set { startDate = value; OnPropertyChanged(); }
-    }
+    // ---------------- COMMANDS ----------------
 
-    private DateTime endDate = DateTime.Today.AddDays(5);
-    public DateTime EndDate
-    {
-        get => endDate;
-        set { endDate = value; OnPropertyChanged(); }
-    }
+    public ICommand GoToCreateTripCommand { get; }
+    public ICommand DeleteTripCommand { get; }
+    public ICommand FilterCommand { get; }
+    public ICommand EditTripCommand { get; }
 
-    private double budget;
-    public double Budget
-    {
-        get => budget;
-        set { budget = value; OnPropertyChanged(); }
-    }
-
-    private int travellers = 1;
-    public int Travellers
-    {
-        get => travellers;
-        set { travellers = value; OnPropertyChanged(); }
-    }
-
-    public ICommand AddTripCommand { get; }
+    // ---------------- CONSTRUCTOR ----------------
 
     public TripsViewModel()
     {
-        AddTripCommand = new Command(AddTrip);
-    }
+        _db = new DatabaseService();
 
-    private void AddTrip()
-    {
-        if (string.IsNullOrWhiteSpace(Destination))
-            return;
+        // Navigation
+        GoToCreateTripCommand = new Command(async () => await GoToCreateTrip());
 
-        Trips.Add(new Trip
+        // Delete
+        DeleteTripCommand = new Command<Trip>(async (trip) => await DeleteTrip(trip));
+
+        // Edit
+        EditTripCommand = new Command<Trip>(async (trip) => await EditTrip(trip));
+
+        // Filter
+        FilterCommand = new Command<string>((filter) =>
         {
-            Destination = Destination,
-            StartDate = StartDate,
-            EndDate = EndDate,
-            Budget = Budget,
-            Travellers = Travellers
+            SelectedFilter = filter;
         });
 
-        Destination = "";
-        Budget = 0;
-        Travellers = 1;
-
-        OnPropertyChanged(nameof(Destination));
-        OnPropertyChanged(nameof(Budget));
-        OnPropertyChanged(nameof(Travellers));
+        Init();
     }
+
+    // ---------------- INIT ----------------
+
+    private async void Init()
+    {
+        await _db.Init();
+        await LoadTrips();
+    }
+
+    // ---------------- LOAD ----------------
+
+    public async Task LoadTrips()
+    {
+        allTrips = await _db.GetTrips(1); // temporary UserId
+
+        ApplyFilter();
+    }
+
+    // ---------------- FILTER LOGIC ----------------
+
+    private void ApplyFilter()
+    {
+        Trips.Clear();
+
+        IEnumerable<Trip> filtered = allTrips;
+
+        if (SelectedFilter == "Upcoming")
+        {
+            filtered = allTrips.Where(t => t.StartDate > DateTime.Today);
+        }
+        else if (SelectedFilter == "Past")
+        {
+            filtered = allTrips.Where(t => t.EndDate < DateTime.Today);
+        }
+        else if (SelectedFilter == "Planning")
+        {
+            filtered = allTrips.Where(t =>
+                t.StartDate >= DateTime.Today &&
+                t.EndDate >= DateTime.Today);
+        }
+
+        foreach (var trip in filtered)
+        {
+            Trips.Add(trip);
+        }
+    }
+
+    // ---------------- DELETE ----------------
+
+    private async Task DeleteTrip(Trip trip)
+    {
+        if (trip == null)
+            return;
+
+        await _db.DeleteTrip(trip);
+
+        await LoadTrips();
+    }
+
+    // ---------------- Edit ----------------
+    private async Task EditTrip(Trip trip)
+    {
+        if (trip == null)
+            return;
+
+        await Shell.Current.GoToAsync($"{nameof(TripNova.Views.CreateTripPage)}?tripId={trip.Id}");
+    }
+
+    // ---------------- NAVIGATION ----------------
+
+    private async Task GoToCreateTrip()
+    {
+        await Shell.Current.GoToAsync(nameof(TripNova.Views.CreateTripPage));
+    }
+
+    // ---------------- NOTIFY ----------------
 
     public event PropertyChangedEventHandler PropertyChanged;
 
-    void OnPropertyChanged([CallerMemberName] string name = "")
+    protected void OnPropertyChanged([CallerMemberName] string name = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }

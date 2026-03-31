@@ -1,0 +1,46 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TripNova.Views.CreateTripPage"
+             Title="Create Trip"
+             BackgroundColor="#F5F5F5">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <!-- Title -->
+            <Label Text="Plan a New Trip"
+                   FontSize="24"
+                   FontAttributes="Bold"/>
+
+            <!-- Destination -->
+            <Entry Placeholder="Destination"
+                   Text="{Binding Destination}" />
+
+            <!-- Dates -->
+            <Label Text="Start Date"/>
+            <DatePicker Date="{Binding StartDate}" />
+
+            <Label Text="End Date"/>
+            <DatePicker Date="{Binding EndDate}" />
+
+            <!-- Budget -->
+            <Entry Placeholder="Budget"
+                   Keyboard="Numeric"
+                   Text="{Binding Budget}" />
+
+            <!-- Travellers -->
+            <Entry Placeholder="Number of Travellers"
+                   Keyboard="Numeric"
+                   Text="{Binding Travellers}" />
+
+            <!-- Save Button -->
+            <Button Text="Save Trip"
+                    Command="{Binding SaveTripCommand}"
+                    BackgroundColor="#FF2D75"
+                    TextColor="White"
+                    CornerRadius="10"
+                    HeightRequest="50"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
