@@ -44,9 +44,9 @@
                         BackgroundColor="#E0E0E0"
                         CornerRadius="20"/>
 
-                <Button Text="Planning"
+                <Button Text="Happening"
                         Command="{Binding FilterCommand}"
-                        CommandParameter="Planning"
+                        CommandParameter="Happening"
                         BackgroundColor="#E0E0E0"
                         CornerRadius="20"/>
 
@@ -74,9 +74,9 @@
                                     <Image Source="bali.jpg"
                                            Aspect="AspectFill"/>
 
-                                    <Label Text="Upcoming"
+                                    <Label Text="{Binding Status}"
                                            BackgroundColor="#DDE7FF"
-                                           TextColor="Blue"
+                                           TextColor="{Binding StatusColor}"
                                            Padding="6,2"
                                            HorizontalOptions="End"
                                            VerticalOptions="Start"
@@ -90,9 +90,7 @@
                                            FontSize="18"
                                            FontAttributes="Bold"/>
 
-                                    <Label Text="Indonesia"
-                                           FontSize="12"
-                                           TextColor="Gray"/>
+                                   
 
                                     <!-- Date + Budget -->
                                     <Grid ColumnDefinitions="*,*">
@@ -119,9 +117,9 @@
                                     <Border BackgroundColor="#EEF2FF"
                                             StrokeShape="RoundRectangle 10"
                                             Padding="8">
-                                        <Label Text="Trip coming soon"
+                                        <Label Text="{Binding CountdownText}"
                                                HorizontalTextAlignment="Center"
-                                               TextColor="#3B82F6"/>
+                                               TextColor="#3B82F6"/>       
                                     </Border>
 
                                     <!-- ACTIONS (FIXED) -->

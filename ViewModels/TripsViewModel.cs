@@ -90,17 +90,20 @@ public class TripsViewModel : INotifyPropertyChanged
 
         if (SelectedFilter == "Upcoming")
         {
+            // Upcoming
             filtered = allTrips.Where(t => t.StartDate > DateTime.Today);
+        }
+        else if (SelectedFilter == "Happening")
+        {
+            // Happening
+            filtered = allTrips.Where(t =>
+                t.StartDate <= DateTime.Today &&
+                t.EndDate >= DateTime.Today);
         }
         else if (SelectedFilter == "Past")
         {
+            // Past
             filtered = allTrips.Where(t => t.EndDate < DateTime.Today);
-        }
-        else if (SelectedFilter == "Planning")
-        {
-            filtered = allTrips.Where(t =>
-                t.StartDate >= DateTime.Today &&
-                t.EndDate >= DateTime.Today);
         }
 
         foreach (var trip in filtered)
@@ -136,6 +139,7 @@ public class TripsViewModel : INotifyPropertyChanged
     {
         await Shell.Current.GoToAsync(nameof(TripNova.Views.CreateTripPage));
     }
+
 
     // ---------------- NOTIFY ----------------
 
