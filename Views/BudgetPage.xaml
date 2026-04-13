@@ -28,14 +28,12 @@
                 </VerticalStackLayout>
 
             </Grid>
-
-
             <!-- TOTAL BUDGET CARD -->
-            <Border Margin="20,-60,20,0"
-                    BackgroundColor="#F1F5F9"
-                    StrokeThickness="0"
-                    StrokeShape="RoundRectangle 20"
-                    Padding="20">
+            <Border Margin="20,-80,20,0"
+                BackgroundColor="#F1F5F9"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 20"
+                Padding="20">
 
                 <VerticalStackLayout>
 
@@ -55,6 +53,28 @@
 
             </Border>
 
+            <!-- Trip Selector -->
+            <Border Margin="20,10,20,0"
+        Padding="10"
+        BackgroundColor="White"
+        StrokeShape="RoundRectangle 12">
+
+                <VerticalStackLayout>
+
+                    <Label Text="Select Trip"
+               FontSize="12"
+               TextColor="Gray"/>
+
+                    <Picker ItemsSource="{Binding Trips}"
+                ItemDisplayBinding="{Binding Destination}"
+                SelectedItem="{Binding SelectedTrip}" />
+
+                </VerticalStackLayout>
+
+            </Border>
+
+
+            
 
             <!-- CATEGORY BREAKDOWN -->
             <Border Margin="20,0"

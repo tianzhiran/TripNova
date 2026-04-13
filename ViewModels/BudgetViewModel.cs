@@ -15,6 +15,7 @@ public class BudgetViewModel : INotifyPropertyChanged
     public int TripId { get; set; }
 
     public ObservableCollection<BudgetItem> Items { get; } = new();
+    public ObservableCollection<Trip> Trips { get; } = new();
 
     public ICommand ShowAddDialogCommand { get; }
     public ICommand DeleteItemCommand { get; }
@@ -42,6 +43,23 @@ public class BudgetViewModel : INotifyPropertyChanged
 
     public async Task LoadBudgetItems()
     {
+        // ❗如果没有传 TripId（从 Budget tab 进入）
+        if (TripId == 0)
+        {
+            var trips = await _database.GetTrips(1); // temporary userId
+
+            if (trips.Count > 0)
+            {
+                TripId = trips[0].Id; // 默认第一个 Trip
+            }
+            else
+            {
+                // 没有任何 trip，直接清空
+                Items.Clear();
+                return;
+            }
+        }
+
         var items = await _database.GetBudgetItems(TripId);
 
         Items.Clear();
@@ -92,6 +110,50 @@ public class BudgetViewModel : INotifyPropertyChanged
 
         Items.Add(newItem);
     }
+
+
+    // ================= selectedTrip =================
+    private Trip _selectedTrip;
+    public Trip SelectedTrip
+    {
+        get => _selectedTrip;
+        set
+        {
+            _selectedTrip = value;
+            OnPropertyChanged();
+
+            if (value != null)
+            {
+                TripId = value.Id;
+                _ = LoadBudgetItems(); // 自动刷新🔥
+            }
+        }
+    }
+
+    // ================= LoadTrips =================
+    public async Task LoadTrips()
+    {
+        var trips = await _database.GetTrips(1);
+
+        Trips.Clear();
+
+        foreach (var trip in trips)
+            Trips.Add(trip);
+
+        // 🔥 关键逻辑（兼容两种入口）
+        if (Trips.Count > 0)
+        {
+            if (TripId != 0)
+            {
+                SelectedTrip = Trips.FirstOrDefault(t => t.Id == TripId);
+            }
+            else
+            {
+                SelectedTrip = Trips[0];
+            }
+        }
+    }
+
 
     // ================= DELETE =================
 

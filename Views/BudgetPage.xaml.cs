@@ -19,7 +19,7 @@ public partial class BudgetPage : ContentPage
 
         if (BindingContext is BudgetViewModel vm)
         {
-            await vm.LoadBudgetItems();   // 🔥加载数据库数据
+            await vm.LoadTrips();   // 🔥先加载 Trip（会自动触发预算）
         }
     }
 }

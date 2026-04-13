@@ -57,15 +57,11 @@ public class TripsViewModel : INotifyPropertyChanged
         });
         OpenBudgetCommand = new Command<Trip>(async (trip) => await OpenBudget(trip));
 
-        Init();
+
     }
 
     // ---------------- INIT ----------------
 
-    private async void Init()
-    {
-        await LoadTrips();
-    }
 
     // ---------------- LOAD ----------------
 

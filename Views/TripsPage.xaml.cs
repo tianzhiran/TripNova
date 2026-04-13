@@ -18,6 +18,9 @@ public partial class TripsPage : ContentPage
     {
         base.OnAppearing();
 
-        await _viewModel.LoadTrips(); // 🔥 每次回来刷新
+        if (BindingContext is TripsViewModel vm)
+        {
+            await vm.LoadTrips();
+        }
     }
 }
