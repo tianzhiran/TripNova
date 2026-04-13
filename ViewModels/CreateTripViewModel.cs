@@ -74,7 +74,6 @@ public class CreateTripViewModel : INotifyPropertyChanged
 
     private async void Init()
     {
-        await _db.Init();
     }
 
     // ---------------- SAVE ----------------

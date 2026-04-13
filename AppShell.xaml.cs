@@ -10,5 +10,6 @@ public partial class AppShell : Shell
 
         // ✅ Register route here
         Routing.RegisterRoute(nameof(CreateTripPage), typeof(CreateTripPage));
+        Routing.RegisterRoute(nameof(BudgetPage), typeof(BudgetPage));
     }
 }

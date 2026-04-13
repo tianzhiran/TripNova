@@ -7,7 +7,6 @@ using TripNova.Services;
 
 namespace TripNova.ViewModels;
 
-
 public class TripsViewModel : INotifyPropertyChanged
 {
     private readonly DatabaseService _db;
@@ -37,7 +36,7 @@ public class TripsViewModel : INotifyPropertyChanged
     public ICommand GoToCreateTripCommand { get; }
     public ICommand DeleteTripCommand { get; }
     public ICommand FilterCommand { get; }
-    public ICommand EditTripCommand { get; }
+    public ICommand OpenBudgetCommand { get; }
 
     // ---------------- CONSTRUCTOR ----------------
 
@@ -51,14 +50,12 @@ public class TripsViewModel : INotifyPropertyChanged
         // Delete
         DeleteTripCommand = new Command<Trip>(async (trip) => await DeleteTrip(trip));
 
-        // Edit
-        EditTripCommand = new Command<Trip>(async (trip) => await EditTrip(trip));
-
         // Filter
         FilterCommand = new Command<string>((filter) =>
         {
             SelectedFilter = filter;
         });
+        OpenBudgetCommand = new Command<Trip>(async (trip) => await OpenBudget(trip));
 
         Init();
     }
@@ -67,7 +64,6 @@ public class TripsViewModel : INotifyPropertyChanged
 
     private async void Init()
     {
-        await _db.Init();
         await LoadTrips();
     }
 
@@ -80,6 +76,12 @@ public class TripsViewModel : INotifyPropertyChanged
         ApplyFilter();
     }
 
+    public async Task OpenBudget(Trip trip)
+    {
+        await Shell.Current.GoToAsync($"BudgetPage?tripId={trip.Id}");
+    }
+
+
     // ---------------- FILTER LOGIC ----------------
 
     private void ApplyFilter()
@@ -90,20 +92,17 @@ public class TripsViewModel : INotifyPropertyChanged
 
         if (SelectedFilter == "Upcoming")
         {
-            // Upcoming
             filtered = allTrips.Where(t => t.StartDate > DateTime.Today);
-        }
-        else if (SelectedFilter == "Happening")
-        {
-            // Happening
-            filtered = allTrips.Where(t =>
-                t.StartDate <= DateTime.Today &&
-                t.EndDate >= DateTime.Today);
         }
         else if (SelectedFilter == "Past")
         {
-            // Past
             filtered = allTrips.Where(t => t.EndDate < DateTime.Today);
+        }
+        else if (SelectedFilter == "Planning")
+        {
+            filtered = allTrips.Where(t =>
+                t.StartDate >= DateTime.Today &&
+                t.EndDate >= DateTime.Today);
         }
 
         foreach (var trip in filtered)
@@ -124,22 +123,12 @@ public class TripsViewModel : INotifyPropertyChanged
         await LoadTrips();
     }
 
-    // ---------------- Edit ----------------
-    private async Task EditTrip(Trip trip)
-    {
-        if (trip == null)
-            return;
-
-        await Shell.Current.GoToAsync($"{nameof(TripNova.Views.CreateTripPage)}?tripId={trip.Id}");
-    }
-
     // ---------------- NAVIGATION ----------------
 
     private async Task GoToCreateTrip()
     {
         await Shell.Current.GoToAsync(nameof(TripNova.Views.CreateTripPage));
     }
-
 
     // ---------------- NOTIFY ----------------
 

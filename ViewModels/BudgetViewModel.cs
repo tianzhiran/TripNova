@@ -3,24 +3,28 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using TripNova.Models;
+using TripNova.Services;
 
 namespace TripNova.ViewModels;
 
+[QueryProperty(nameof(TripId), "tripId")]
 public class BudgetViewModel : INotifyPropertyChanged
 {
+    private readonly DatabaseService _database;
+
+    public int TripId { get; set; }
+
     public ObservableCollection<BudgetItem> Items { get; } = new();
 
     public ICommand ShowAddDialogCommand { get; }
     public ICommand DeleteItemCommand { get; }
 
-    public BudgetViewModel()
+    public BudgetViewModel(DatabaseService database)
     {
+        _database = database;
+
         ShowAddDialogCommand = new Command(ShowAddDialog);
         DeleteItemCommand = new Command<BudgetItem>(DeleteItem);
-
-        // sample data
-        Items.Add(new BudgetItem { Category = "Transportation", Description = "Flight Ticket", Amount = 850 });
-        Items.Add(new BudgetItem { Category = "Accommodation", Description = "Hotel", Amount = 600 });
 
         Items.CollectionChanged += (s, e) =>
         {
@@ -33,6 +37,20 @@ public class BudgetViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(OtherTotal));
         };
     }
+
+    // ================= LOAD FROM DATABASE =================
+
+    public async Task LoadBudgetItems()
+    {
+        var items = await _database.GetBudgetItems(TripId);
+
+        Items.Clear();
+
+        foreach (var item in items)
+            Items.Add(item);
+    }
+
+    // ================= ADD =================
 
     private async void ShowAddDialog()
     {
@@ -62,19 +80,32 @@ public class BudgetViewModel : INotifyPropertyChanged
         if (!double.TryParse(amountText, out double amount) || amount <= 0)
             return;
 
-        Items.Add(new BudgetItem
+        var newItem = new BudgetItem
         {
+            TripId = TripId,   // 🔥关键连接！
             Category = category,
             Description = description,
             Amount = amount
-        });
+        };
+
+        await _database.AddBudgetItem(newItem);
+
+        Items.Add(newItem);
     }
 
-    private void DeleteItem(BudgetItem item)
+    // ================= DELETE =================
+
+    private async void DeleteItem(BudgetItem item)
     {
-        if (item != null)
-            Items.Remove(item);
+        if (item == null)
+            return;
+
+        await _database.DeleteBudgetItem(item);
+
+        Items.Remove(item);
     }
+
+    // ================= CALCULATIONS =================
 
     public double TotalBudget => Items.Sum(i => i.Amount);
 
@@ -96,7 +127,10 @@ public class BudgetViewModel : INotifyPropertyChanged
     public double OtherTotal =>
         Items.Where(i => i.Category == "Other").Sum(i => i.Amount);
 
+    // ================= INotify =================
+
     public event PropertyChangedEventHandler PropertyChanged;
+
     void OnPropertyChanged([CallerMemberName] string name = "")
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 }

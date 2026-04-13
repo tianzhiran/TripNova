@@ -7,7 +7,9 @@ public class DatabaseService
 {
     private SQLiteAsyncConnection _db;
 
-    public async Task Init()
+    // ================= INIT =================
+
+    private async Task Init()
     {
         if (_db != null)
             return;
@@ -21,62 +23,90 @@ public class DatabaseService
         await _db.CreateTableAsync<BudgetItem>();
     }
 
-    // ---------------- USER ----------------
+    // ================= USER =================
 
-    public Task<int> AddUser(User user)
+    public async Task<int> AddUser(User user)
     {
-        return _db.InsertAsync(user);
+        await Init();
+        return await _db.InsertAsync(user);
     }
 
-    public Task<User> GetUser(string username, string password)
+    public async Task<User> GetUser(string username, string password)
     {
-        return _db.Table<User>()
+        await Init();
+        return await _db.Table<User>()
             .Where(u => u.Username == username && u.Password == password)
             .FirstOrDefaultAsync();
     }
 
-    // ---------------- TRIP ----------------
+    // ================= TRIP =================
 
-    public Task<int> AddTrip(Trip trip)
+    public async Task<int> AddTrip(Trip trip)
     {
-        return _db.InsertAsync(trip);
+        await Init();
+        return await _db.InsertAsync(trip);
     }
 
-    public Task<List<Trip>> GetTrips(int userId)
+    public async Task<List<Trip>> GetTrips(int userId)
     {
-        return _db.Table<Trip>()
+        await Init();
+        return await _db.Table<Trip>()
             .Where(t => t.UserId == userId)
             .ToListAsync();
     }
 
-    public Task<int> DeleteTrip(Trip trip)
+    public async Task<Trip> GetTripById(int id)
     {
-        return _db.DeleteAsync(trip);
-    }
-
-    public Task<int> UpdateTrip(Trip trip)
-    {
-        return _db.UpdateAsync(trip);
-    }
-
-    public Task<Trip> GetTripById(int id)
-    {
-        return _db.Table<Trip>()
+        await Init();
+        return await _db.Table<Trip>()
             .Where(t => t.Id == id)
             .FirstOrDefaultAsync();
     }
 
-    // ---------------- BUDGET ----------------
-
-    public Task<int> AddBudgetItem(BudgetItem item)
+    public async Task<int> UpdateTrip(Trip trip)
     {
-        return _db.InsertAsync(item);
+        await Init();
+        return await _db.UpdateAsync(trip);
     }
 
-    public Task<List<BudgetItem>> GetBudgetItems(int tripId)
+    public async Task<int> DeleteTrip(Trip trip)
     {
-        return _db.Table<BudgetItem>()
+        await Init();
+        return await _db.DeleteAsync(trip);
+    }
+
+    // ================= BUDGET =================
+
+    public async Task<int> AddBudgetItem(BudgetItem item)
+    {
+        await Init();
+        return await _db.InsertAsync(item);
+    }
+
+    public async Task<List<BudgetItem>> GetBudgetItems(int tripId)
+    {
+        await Init();
+        return await _db.Table<BudgetItem>()
             .Where(b => b.TripId == tripId)
             .ToListAsync();
+    }
+
+    public async Task<int> DeleteBudgetItem(BudgetItem item)
+    {
+        await Init();
+        return await _db.DeleteAsync(item);
+    }
+
+    // ================= CALCULATION =================
+
+    public async Task<double> GetTotalSpent(int tripId)
+    {
+        await Init();
+
+        var items = await _db.Table<BudgetItem>()
+            .Where(b => b.TripId == tripId)
+            .ToListAsync();
+
+        return items.Sum(i => i.Amount);
     }
 }
