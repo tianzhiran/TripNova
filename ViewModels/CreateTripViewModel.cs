@@ -17,8 +17,12 @@ public class CreateTripViewModel : INotifyPropertyChanged
         get => tripId;
         set
         {
+            if (tripId == value) return;
+
             tripId = value;
-            LoadTrip(); // 🔥 自动加载
+            OnPropertyChanged();
+
+            _ = LoadTrip();
         }
     }
     private readonly DatabaseService _db;
@@ -69,11 +73,7 @@ public class CreateTripViewModel : INotifyPropertyChanged
         _db = new DatabaseService();
         SaveTripCommand = new Command(async () => await SaveTrip());
 
-        Init();
-    }
-
-    private async void Init()
-    {
+        
     }
 
     // ---------------- SAVE ----------------
@@ -118,7 +118,7 @@ public class CreateTripViewModel : INotifyPropertyChanged
         await Shell.Current.GoToAsync("..");
     }
 
-    private async void LoadTrip()
+    private async Task LoadTrip()
     {
         if (TripId == 0)
             return;

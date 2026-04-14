@@ -37,6 +37,7 @@ public class TripsViewModel : INotifyPropertyChanged
     public ICommand DeleteTripCommand { get; }
     public ICommand FilterCommand { get; }
     public ICommand OpenBudgetCommand { get; }
+    public ICommand EditTripCommand { get; }
 
     // ---------------- CONSTRUCTOR ----------------
 
@@ -56,6 +57,8 @@ public class TripsViewModel : INotifyPropertyChanged
             SelectedFilter = filter;
         });
         OpenBudgetCommand = new Command<Trip>(async (trip) => await OpenBudget(trip));
+
+        EditTripCommand = new Command<Trip>(async (trip) => await EditTrip(trip));
 
 
     }
@@ -105,6 +108,14 @@ public class TripsViewModel : INotifyPropertyChanged
         {
             Trips.Add(trip);
         }
+    }
+    // ---------------- Edit ----------------//
+    public async Task EditTrip(Trip trip)
+    {
+        if (trip == null)
+            return;
+
+        await Shell.Current.GoToAsync($"CreateTripPage?tripId={trip.Id}");
     }
 
     // ---------------- DELETE ----------------
