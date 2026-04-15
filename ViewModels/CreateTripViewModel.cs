@@ -1,4 +1,6 @@
 ﻿using Microsoft.Maui.Controls;
+using Plugin.LocalNotification;
+using Plugin.LocalNotification.Core.Models;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -114,6 +116,38 @@ public class CreateTripViewModel : INotifyPropertyChanged
 
             await _db.UpdateTrip(updatedTrip);
         }
+
+        // 🔥 即时通知（先执行）
+        var instantRequest = new NotificationRequest
+        {
+            NotificationId = DateTime.Now.Millisecond,
+            Title = "Trip Saved ✈️",
+            Description = $"Your trip to {Destination} has been saved!"
+        };
+
+        await LocalNotificationCenter.Current.Show(instantRequest);
+
+        // 🔥 定时通知（Trip Reminder）
+        var notifyTime = StartDate.AddDays(-1);
+
+        if (notifyTime > DateTime.Now)
+        {
+            var scheduledRequest = new NotificationRequest
+            {
+                NotificationId = DateTime.Now.Millisecond + 1000,
+                Title = "Trip Reminder ✈️",
+                Description = $"Your trip to {Destination} starts tomorrow!",
+                Schedule = new NotificationRequestSchedule
+                {
+                    NotifyTime = notifyTime
+                }
+            };
+
+            await LocalNotificationCenter.Current.Show(scheduledRequest);
+        }
+
+        // 🔥 防止被页面跳转吞掉
+        await Task.Delay(800);
 
         await Shell.Current.GoToAsync("..");
     }
