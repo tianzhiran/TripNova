@@ -58,4 +58,67 @@ public class Trip
             return "Trip completed";
         }
     }
+
+    [Ignore]
+    public bool IsOverBudget { get; set; }
+
+    [Ignore]
+    public string BudgetStatusText
+    {
+        get => IsOverBudget ? "⚠️ Over Budget" : "";
+    }
+
+    [Ignore]
+    public double TotalSpent { get; set; }
+
+    [Ignore]
+    public double RemainingBudget => Budget - TotalSpent;
+
+    [Ignore]
+    public double Progress => Budget == 0 ? 0 : TotalSpent / Budget;
+
+    [Ignore]
+    public string BudgetSummary
+    {
+        get
+        {
+            if (TotalSpent > Budget)
+                return $"Over by ${TotalSpent - Budget} ⚠️";
+
+            return $"Remaining: ${RemainingBudget}";
+        }
+    }
+
+    [Ignore]
+    public bool IsNearLimit => Progress >= 0.8 && Progress <= 1.0;
+
+    [Ignore]
+    public string WarningText
+    {
+        get
+        {
+            if (Progress > 1.0)
+                return "⚠️ Over Budget";
+
+            if (Progress >= 0.8)
+                return "⚠️ Near Budget Limit";
+
+            return "";
+        }
+    }
+
+    [Ignore]
+    public Color ProgressColor
+    {
+        get
+        {
+            if (Progress > 1.0)
+                return Colors.Red;
+
+            if (Progress >= 0.8)
+                return Colors.Orange;
+
+            return Colors.Green;
+        }
+    }
 }

@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using Plugin.LocalNotification;
+using Plugin.LocalNotification.Core.Models;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -109,6 +111,7 @@ public class BudgetViewModel : INotifyPropertyChanged
         await _database.AddBudgetItem(newItem);
 
         Items.Add(newItem);
+        await CheckBudgetExceeded();
     }
 
 
@@ -153,7 +156,27 @@ public class BudgetViewModel : INotifyPropertyChanged
             }
         }
     }
+    // ================= Budget Alert =================
 
+    private async Task CheckBudgetExceeded()
+    {
+        if (SelectedTrip == null)
+            return;
+
+        double total = Items.Sum(i => i.Amount);
+
+        if (total > SelectedTrip.Budget)
+        {
+            var request = new NotificationRequest
+            {
+                NotificationId = DateTime.Now.Millisecond + 2000,
+                Title = "⚠️ Budget Alert",
+                Description = "You have exceeded your trip budget!"
+            };
+
+            await LocalNotificationCenter.Current.Show(request);
+        }
+    }
 
     // ================= DELETE =================
 
@@ -165,6 +188,7 @@ public class BudgetViewModel : INotifyPropertyChanged
         await _database.DeleteBudgetItem(item);
 
         Items.Remove(item);
+        await CheckBudgetExceeded();
     }
 
     // ================= CALCULATIONS =================

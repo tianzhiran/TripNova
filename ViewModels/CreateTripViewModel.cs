@@ -117,7 +117,7 @@ public class CreateTripViewModel : INotifyPropertyChanged
             await _db.UpdateTrip(updatedTrip);
         }
 
-        // 🔥 即时通知（先执行）
+        // Immediate notification (execute first)
         var instantRequest = new NotificationRequest
         {
             NotificationId = DateTime.Now.Millisecond,
@@ -127,7 +127,7 @@ public class CreateTripViewModel : INotifyPropertyChanged
 
         await LocalNotificationCenter.Current.Show(instantRequest);
 
-        // 🔥 定时通知（Trip Reminder）
+        // Trip Reminder
         var notifyTime = StartDate.AddDays(-1);
 
         if (notifyTime > DateTime.Now)

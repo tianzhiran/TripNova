@@ -72,6 +72,16 @@ public class TripsViewModel : INotifyPropertyChanged
     {
         allTrips = await _db.GetTrips(1); // temporary UserId
 
+        foreach (var trip in allTrips)
+        {
+            var items = await _db.GetBudgetItems(trip.Id);
+
+            double total = items.Sum(i => i.Amount);
+
+            trip.TotalSpent = total;
+            trip.IsOverBudget = total > trip.Budget;
+        }
+
         ApplyFilter();
     }
 
