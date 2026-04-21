@@ -60,21 +60,37 @@ public class TripsViewModel : INotifyPropertyChanged
 
         EditTripCommand = new Command<Trip>(async (trip) => await EditTrip(trip));
 
+        Init();
 
     }
 
     // ---------------- INIT ----------------
 
-
+    private async void Init()
+    {
+        try
+        {
+            await _db.Init();
+            await LoadTrips();
+        }
+        catch (Exception ex)
+        {
+            await Application.Current.MainPage.DisplayAlert(
+                "Error",
+                ex.Message,
+                "OK");
+        }
+    }
     // ---------------- LOAD ----------------
 
     public async Task LoadTrips()
     {
+        Console.WriteLine("Loading trips...");
         allTrips = await _db.GetTrips(1); // temporary UserId
 
         foreach (var trip in allTrips)
         {
-            var items = await _db.GetBudgetItems(trip.Id);
+            var items = await _db.GetBudgetItems(trip.Id) ?? new List<BudgetItem>();
 
             double total = items.Sum(i => i.Amount);
 
@@ -107,10 +123,10 @@ public class TripsViewModel : INotifyPropertyChanged
         {
             filtered = allTrips.Where(t => t.EndDate < DateTime.Today);
         }
-        else if (SelectedFilter == "Planning")
+        else if (SelectedFilter == "Happening")
         {
             filtered = allTrips.Where(t =>
-                t.StartDate >= DateTime.Today &&
+                t.StartDate <= DateTime.Today &&
                 t.EndDate >= DateTime.Today);
         }
 

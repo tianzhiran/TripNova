@@ -3,10 +3,23 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TripNova.Views.AIPage"
              Title="AIPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+    <VerticalStackLayout Padding="20" Spacing="15">
+
+        <Label Text="AI Travel Assistant 🤖"
+           FontSize="22"
+           FontAttributes="Bold"/>
+
+        <Entry Placeholder="e.g. I have $1500 for 5 days in Bali"
+           Text="{Binding UserInput}" />
+
+        <Button Text="Ask AI"
+            Command="{Binding GetSuggestionCommand}"
+            BackgroundColor="#FF2D75"
+            TextColor="White"/>
+
+        <Label Text="{Binding AIResult}"
+           FontSize="14"
+           TextColor="Black"/>
+
     </VerticalStackLayout>
 </ContentPage>

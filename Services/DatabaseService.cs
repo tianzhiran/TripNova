@@ -9,7 +9,7 @@ public class DatabaseService
 
     // ================= INIT =================
 
-    private async Task Init()
+    public async Task Init()
     {
         if (_db != null)
             return;
