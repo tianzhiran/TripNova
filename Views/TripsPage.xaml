@@ -71,7 +71,7 @@
 
                                 <!-- IMAGE -->
                                 <Grid HeightRequest="150">
-                                    <Image Source="bali.jpg"
+                                    <Image Source="sydney.jpg"
                                            Aspect="AspectFill"/>
 
                                     <Label Text="{Binding Status}"

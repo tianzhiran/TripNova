@@ -45,7 +45,7 @@ public class BudgetViewModel : INotifyPropertyChanged
 
     public async Task LoadBudgetItems()
     {
-        // ❗如果没有传 TripId（从 Budget tab 进入）
+       
         if (TripId == 0)
         {
             var trips = await _database.GetTrips(1); // temporary userId
@@ -56,7 +56,7 @@ public class BudgetViewModel : INotifyPropertyChanged
             }
             else
             {
-                // 没有任何 trip，直接清空
+                
                 Items.Clear();
                 return;
             }

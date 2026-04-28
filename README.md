@@ -3,62 +3,84 @@ TripNova Travel Planner App
 
 Project Overview
 ----------------
-TripNova is a prototype mobile travel planning application developed using .NET MAUI in Visual Studio. 
-The application aims to help users organise travel plans, track expenses, explore destinations, and 
-receive intelligent travel assistance in a simple and user-friendly interface.
+TripNova is a mobile travel planning application developed using .NET MAUI in Visual Studio. 
+The application is designed to help users organise trips, track expenses, explore destinations, 
+and receive intelligent travel suggestions within a single integrated platform.
 
-This project is currently under active development as part of a mobile application programming course. 
-Core features are being progressively implemented following an iterative SCRUM-based development approach.
+The app provides a complete workflow from trip planning to budget management, combining 
+user-friendly design with practical real-world functionality.
 
 Development Framework & Architecture
 ------------------------------------
-The application is built using the MVVM (Model–View–ViewModel) architectural pattern to improve code 
-maintainability, scalability, and separation of concerns.
+TripNova is built using the MVVM (Model–View–ViewModel) architectural pattern, ensuring clear 
+separation of concerns, maintainability, and scalability.
 
-- Model Layer: Manages core data structures such as Trips and Budget Items.
-- View Layer: Provides responsive user interface pages designed using XAML.
-- ViewModel Layer: Handles business logic, UI interaction flow, and data binding.
+- Model Layer: Defines core data structures such as Trip, BudgetItem, Destination, and User.
+- View Layer: Implements responsive UI pages using XAML.
+- ViewModel Layer: Handles application logic, user interaction, and data binding.
 
-The app also uses Shell navigation to create a structured bottom navigation system that allows users 
-to quickly access key functional areas.
+The application also uses Shell navigation to implement a bottom navigation system, allowing 
+users to quickly switch between core modules.
 
-Current Implemented Features (Prototype Stage)
-----------------------------------------------
+Core Features (Final Version)
+-----------------------------
 - Shell-based bottom navigation (Home, Search, Budget, AI, Trips)
-- Trip creation and basic trip management functionality
-- Budget dashboard displaying total expenses and category breakdown
-- Expense tracking using ObservableCollection (temporary in-memory storage)
-- Predefined expense categories to simplify input and support financial analysis
-- MVVM data binding for real-time UI updates
-- Responsive layout design improvements
 
-Features In Progress
---------------------
-- Linking budget records to specific trips
-- SQLite database integration for persistent data storage
-- Destination search functionality using external APIs
-- AI-based travel suggestion module
-- UI/UX optimisation and interaction refinement
+- Full trip management system:
+  - Create, edit, delete, and filter trips (Upcoming, Happening, Past)
+
+- Budget management system:
+  - Expense tracking with predefined categories
+  - Real-time total calculation and visual feedback
+  - Budget progress monitoring and over-budget detection
+
+- Persistent data storage:
+  - SQLite database integration
+  - One-to-many relationship (Trip → BudgetItem)
+
+- Local notification system:
+  - Alerts for trip creation and budget exceedance
+
+- AI-style assistant:
+  - Mock AI service providing structured budget suggestions
+  - Designed to support future integration with real AI APIs
+
+- External service integration:
+  - Google Maps for navigation
+  - Booking platforms for accommodation planning
+
+- Dynamic UI updates:
+  - MVVM data binding with ObservableCollection
+  - Real-time updates across the application
 
 Version Control & Development Process
 -------------------------------------
-Development progress is managed using GitHub Classroom with incremental commits that demonstrate 
-prototype evolution. Code comments are included to explain in-progress logic and design decisions.
+The project was developed using an iterative SCRUM-based approach. Progress was tracked through 
+GitHub Classroom with incremental commits demonstrating feature evolution, debugging, and refinement.
 
-Future Development Direction
-----------------------------
-- Implement structured database services and repository pattern
-- Enhance navigation flow and user experience consistency
-- Improve data visualisation for travel expense planning
-- Expand intelligent travel planning capabilities
+Code is structured in a modular way, with clear separation between Models, Views, ViewModels, 
+and Services to support maintainability and future scalability.
+
+Technology Stack
+----------------
+- .NET MAUI (C# / XAML)
+- SQLite (Local Database)
+- Plugin.LocalNotification (Notifications)
+- MVVM Architecture Pattern
+
+Future Improvements
+-------------------
+- Integration of real AI APIs for intelligent recommendations
+- External travel APIs for live destination data
+- Cloud-based data storage and user authentication
+- Enhanced data visualisation and analytics features
 
 Author
 ------
-Student Name: Tian Zhiran
-Course: Mobile Application Programming
-Application Name: TripNova
-Technology Stack: .NET MAUI (C# / XAML)
+Student Name: Tian Zhiran  
+Course: Mobile Application Programming  
+Application Name: TripNova  
 
 Project Status
 --------------
-Prototype – In Progress
+Completed Functional Prototype (Final Submission Version)

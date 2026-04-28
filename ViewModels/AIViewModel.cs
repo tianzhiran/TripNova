@@ -15,7 +15,7 @@ public class AIViewModel : INotifyPropertyChanged
         GetSuggestionCommand = new Command(async () => await GetSuggestion());
     }
 
-    // 🔹 用户输入
+    // 🔹 user input
     private string userInput;
     public string UserInput
     {
@@ -23,7 +23,7 @@ public class AIViewModel : INotifyPropertyChanged
         set { userInput = value; OnPropertyChanged(); }
     }
 
-    // 🔹 AI返回结果
+    // 🔹 AI result
     private string aiResult;
     public string AIResult
     {
@@ -31,10 +31,10 @@ public class AIViewModel : INotifyPropertyChanged
         set { aiResult = value; OnPropertyChanged(); }
     }
 
-    // 🔹 按钮命令
+    // 🔹 command to trigger AI suggestion
     public ICommand GetSuggestionCommand { get; }
 
-    // 🔥 核心逻辑
+    // 🔥 logic to get AI suggestion based on user input
     private async Task GetSuggestion()
     {
         if (string.IsNullOrWhiteSpace(UserInput))

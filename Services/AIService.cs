@@ -6,26 +6,26 @@ public class AIService
 {
     public async Task<string> GetBudgetSuggestion(string input)
     {
-        // 🤖 模拟 AI 思考时间
+        // 🤖 Simulated AI thinking time
         await Task.Delay(1200);
 
-        // 🔍 提取预算金额（例如 1000）
+        // 🔍 Extract the budget amount (e.g., 1000).
         var budgetMatch = Regex.Match(input, @"\d+");
         double budget = budgetMatch.Success ? double.Parse(budgetMatch.Value) : 1000;
 
-        // 🔍 提取天数（例如 5 days）
+        // 🔍 Number of days to extract (e.g., 5 days)
         var daysMatch = Regex.Match(input.ToLower(), @"\d+\s*day");
         int days =   daysMatch.Success ? int.Parse(Regex.Match(daysMatch.Value, @"\d+").Value) : 3;
 
-        // 💡 模拟 AI 分配逻辑
+        // 💡 simulate a simple budget allocation strategy
         double accommodation = budget * 0.5;
         double food = budget * 0.25;
         double activities = budget * 0.25;
 
-        // 📊 每日预算
+        // 📊 Daily budget calculation
         double perDay = budget / days;
 
-        // 🤖 返回“像 AI 的回答”
+        // 🤖 return a formatted suggestion
         return $"🤖 AI Budget Plan\n\n" +
                $"Total Budget: ${budget}\n" +
                $"Trip Duration: {days} days\n\n" +
